@@ -22,3 +22,24 @@ export const gradients = {
 };
 export const TAB_BAR_HEIGHT = 58;
 export const MINI_PLAYER_HEIGHT = 64;
+
+/** Type scale. System font on purpose: no font download to wait for on a phone; weight and tracking carry the personality. */
+export const type = {
+  display: { fontSize: 34, fontWeight: "900" as const, letterSpacing: -1 },
+  title: { fontSize: 26, fontWeight: "800" as const, letterSpacing: -0.6 },
+  heading: { fontSize: 19, fontWeight: "700" as const, letterSpacing: -0.2 },
+  body: { fontSize: 16, fontWeight: "500" as const },
+  small: { fontSize: 13, fontWeight: "500" as const },
+};
+
+const ROOM_PAIRS: readonly (readonly [string, string])[] = [
+  ["#8B5CF6", "#EC4899"], ["#22D3EE", "#8B5CF6"], ["#F472B6", "#FBBF24"], ["#34D399", "#22D3EE"],
+  ["#6366F1", "#22D3EE"], ["#EC4899", "#8B5CF6"], ["#F97316", "#EC4899"], ["#14B8A6", "#8B5CF6"],
+];
+
+/** Every room gets its own colour identity, derived from its code so it is the same on every phone. */
+export function roomColors(code: string): readonly [string, string] {
+  let h = 0;
+  for (let i = 0; i < code.length; i++) h = (h * 31 + code.charCodeAt(i)) >>> 0;
+  return ROOM_PAIRS[h % ROOM_PAIRS.length];
+}

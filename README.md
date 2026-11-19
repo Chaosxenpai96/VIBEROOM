@@ -8,7 +8,9 @@ Stack: Expo React Native + TypeScript (mobile), Node + Express + Socket.IO (serv
 
 **Working and tested (27 passing server tests):** email auth with sessions and password reset, rooms (public/private, codes, passwords, QR invite payload), member presence, shared queue with votes/reorder/permissions, authoritative playback state, demo music provider with original generated audio, personal library (favorites, playlists, recents).
 
-**In progress:** Expo app. Done: design system, auth/socket/player providers, login, tab layout with mini-player, full-screen player. **Still missing:** the five tab screens (Home, Discover, Rooms, Library, Profile), room screen, create/join screens. The app will not launch until these exist.
+**Expo app (typechecks and bundles an Android bundle; not yet run on a device):** login/register/reset, Home, Discover (search + genres), Rooms (open/mine, join by code), Library (favorites, playlists, recents), Profile, create room, join by code or QR scan, full room screen (members with presence, shared queue with votes, reorder and remove, host controls, player-device selection, invite QR, settings, activity), mini-player and full-screen player.
+
+**Not verified yet:** the app has not been run on a phone or simulator in this environment, so layout and touch behavior still need your eyes. Real playback needs a phone running Expo Go against the server.
 
 **Not started:** karaoke and duet sessions, social features (friends, notifications, games), Spotify provider (needs credentials and policy review).
 

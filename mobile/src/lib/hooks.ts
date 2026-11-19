@@ -37,3 +37,39 @@ export const fmtTime = (ms: number) => {
   const s = Math.max(0, Math.floor(ms / 1000));
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 };
+
+import { useAuth } from "./auth";
+
+/** Favourite track ids for the signed-in user, with optimistic toggle. */
+export function useFavoriteIds() {
+  const { api } = useAuth();
+  const [ids, setIds] = useState<Set<string>>(new Set());
+  const reload = useCallback(async () => {
+    try { setIds(new Set((await api.get<{ ids: string[] }>("/library/favorite-ids")).ids)); } catch { /* shown empty; toggling still reports errors */ }
+  }, [api]);
+  useEffect(() => { void reload(); }, [reload]);
+  const toggle = useCallback(async (trackId: string) => {
+    const had = ids.has(trackId);
+    setIds((s) => { const n = new Set(s); had ? n.delete(trackId) : n.add(trackId); return n; });
+    try {
+      if (had) await api.del(`/library/favorites/${trackId}`); else await api.put(`/library/favorites/${trackId}`);
+    } catch (e) {
+      setIds((s) => { const n = new Set(s); had ? n.add(trackId) : n.delete(trackId); return n; });
+      throw e;
+    }
+  }, [api, ids]);
+  return { ids, toggle, reload };
+}
+
+/** Short-lived message shown at the bottom of a screen. */
+export function useToast() {
+  const [msg, setMsg] = useState<{ text: string; error: boolean } | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const show = useCallback((text: string, error = false) => {
+    if (timer.current) clearTimeout(timer.current);
+    setMsg({ text, error });
+    timer.current = setTimeout(() => setMsg(null), 2600);
+  }, []);
+  useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
+  return { msg, show };
+}
