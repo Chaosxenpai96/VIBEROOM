@@ -1,0 +1,14 @@
+{
+  "name": "viberoom",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "server"
+  ],
+  "scripts": {
+    "server": "npm run dev -w server",
+    "test": "npm test -w server",
+    "mobile": "npm run start --prefix mobile",
+    "db:migrate": "npm run db:migrate -w server"
+  }
+}
