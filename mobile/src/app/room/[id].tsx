@@ -71,7 +71,7 @@ export default function RoomScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.bg }}>
       <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 120 }}>
-        <LinearGradient colors={[c1, c2, colors.bg]} locations={[0, 0.55, 1]} style={{ paddingTop: insets.top + 8, paddingHorizontal: space.lg, paddingBottom: space.xl, gap: space.lg }}>
+        <LinearGradient colors={[c1 + "B3", c2 + "59", colors.bg]} locations={[0, 0.6, 1]} style={{ paddingTop: insets.top + 8, paddingHorizontal: space.lg, paddingBottom: space.xl, gap: space.lg }}>
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
             <IconButton name="chevron-back" label="Back" onPress={() => router.back()} />
             <View style={{ flexDirection: "row" }}>
@@ -208,21 +208,28 @@ function QueueRow({ item, index, last, meId, isMod, canReorder, accent, onVote, 
   const up = item.upvoterIds.includes(meId), down = item.downvoterIds.includes(meId);
   const canRemove = isMod || item.addedBy.id === meId;
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: space.sm, backgroundColor: colors.surface, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, padding: space.sm }}>
-      <Artwork track={item.track} size={48} radiusPx={10} />
-      <View style={{ flex: 1, gap: 2 }}>
-        <Text numberOfLines={1} style={{ color: colors.text, fontWeight: "700" }}>{item.track.title}</Text>
-        <Text numberOfLines={1} style={{ color: colors.muted, fontSize: 12 }}>{item.track.artist} · added by {item.addedBy.id === meId ? "you" : item.addedBy.displayName}</Text>
+    <View style={{ backgroundColor: colors.surface, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, padding: space.md, gap: space.sm }}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: space.md }}>
+        <Artwork track={item.track} size={52} radiusPx={10} />
+        <View style={{ flex: 1, gap: 2 }}>
+          <Text numberOfLines={1} style={{ color: colors.text, fontWeight: "700", fontSize: 16 }}>{item.track.title}</Text>
+          <Text numberOfLines={1} style={{ color: colors.muted, fontSize: 13 }}>{item.track.artist}</Text>
+          <Text numberOfLines={1} style={{ color: colors.muted, fontSize: 12 }}>Added by {item.addedBy.id === meId ? "you" : item.addedBy.displayName}</Text>
+        </View>
+        {canRemove ? <IconButton name="close" label={`Remove ${item.track.title}`} size={20} color={colors.muted} onPress={onRemove} /> : null}
       </View>
-      <View style={{ alignItems: "center" }}>
-        <IconButton name={up ? "chevron-up-circle" : "chevron-up-circle-outline"} color={up ? accent : colors.muted} label="Upvote" size={22} onPress={() => onVote(1)} style={{ height: 36 }} />
-        <Text style={{ color: item.score > 0 ? accent : colors.muted, fontWeight: "800", fontSize: 13 }} accessibilityLabel={`Score ${item.score}`}>{item.score}</Text>
-        <IconButton name={down ? "chevron-down-circle" : "chevron-down-circle-outline"} color={down ? colors.pink : colors.muted} label="Downvote" size={22} onPress={() => onVote(-1)} style={{ height: 36 }} />
-      </View>
-      <View>
-        {canReorder ? <IconButton name="arrow-up" label="Move up" size={18} disabled={index === 0} onPress={() => onMove(index - 1)} style={{ height: 34 }} /> : null}
-        {canRemove ? <IconButton name="close" label={`Remove ${item.track.title}`} size={18} color={colors.muted} onPress={onRemove} style={{ height: 34 }} /> : null}
-        {canReorder ? <IconButton name="arrow-down" label="Move down" size={18} disabled={last} onPress={() => onMove(index + 1)} style={{ height: 34 }} /> : null}
+      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+        <View style={{ flexDirection: "row", alignItems: "center", backgroundColor: colors.surface2, borderRadius: radius.pill }}>
+          <IconButton name={up ? "arrow-up-circle" : "arrow-up-circle-outline"} color={up ? accent : colors.muted} label="Upvote" size={22} onPress={() => onVote(1)} />
+          <Text style={{ color: item.score > 0 ? accent : item.score < 0 ? colors.pink : colors.muted, fontWeight: "800", minWidth: 22, textAlign: "center" }} accessibilityLabel={`Score ${item.score}`}>{item.score}</Text>
+          <IconButton name={down ? "arrow-down-circle" : "arrow-down-circle-outline"} color={down ? colors.pink : colors.muted} label="Downvote" size={22} onPress={() => onVote(-1)} />
+        </View>
+        {canReorder ? (
+          <View style={{ flexDirection: "row" }}>
+            <IconButton name="chevron-up" label="Move up" size={20} disabled={index === 0} onPress={() => onMove(index - 1)} />
+            <IconButton name="chevron-down" label="Move down" size={20} disabled={last} onPress={() => onMove(index + 1)} />
+          </View>
+        ) : null}
       </View>
     </View>
   );

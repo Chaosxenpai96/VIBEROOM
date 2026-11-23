@@ -12,9 +12,10 @@ export function RoomCard({ room, onPress, width }: { room: RoomListItem; onPress
   return (
     <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${room.name}, ${room.onlineCount} online of ${room.memberCount} members${room.hasPassword ? ", password protected" : ""}`}
       style={({ pressed }) => ({ width, borderRadius: radius.lg, overflow: "hidden", opacity: pressed ? 0.88 : 1, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface })}>
-      <LinearGradient colors={[a, b]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ height: 78, justifyContent: "flex-end", padding: 12 }}>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-          <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: room.onlineCount > 0 ? "#fff" : "#ffffff55" }} />
+      <LinearGradient colors={[a, b]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ height: 84, justifyContent: "flex-end", padding: 12 }}>
+        <Ionicons name="musical-notes" size={76} color="#ffffff2e" style={{ position: "absolute", right: 8, top: 4 }} />
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 6, alignSelf: "flex-start", backgroundColor: "#0000004d", borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 4 }}>
+          <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: room.onlineCount > 0 ? colors.success : "#ffffff77" }} />
           <Text style={{ color: "#fff", fontSize: 12, fontWeight: "700" }}>{room.onlineCount} online</Text>
         </View>
       </LinearGradient>

@@ -51,7 +51,7 @@ export default function Discover() {
           <View style={{ gap: space.sm }}>
             <Muted>{shown.length} {shown.length === 1 ? "track" : "tracks"}</Muted>
             {shown.map((t) => (
-              <TrackRow key={t.id} track={t} subtitle={t.album ? `${t.artist} · ${t.album}` : t.artist} active={player.track?.id === t.id}
+              <TrackRow key={t.id} track={t} active={player.track?.id === t.id}
                 onPress={() => player.playSolo(t).catch((e) => toast.show(e.message, true))}
                 right={<TrackActions track={t} favorite={fav.ids.has(t.id)} onFavorite={onFav} onNotify={toast.show} />} />
             ))}
