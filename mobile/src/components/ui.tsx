@@ -50,16 +50,20 @@ export function Button({ title, onPress, icon, variant = "primary", loading, dis
   title: string; onPress: () => void; icon?: IconName; variant?: "primary" | "secondary" | "ghost" | "danger"; loading?: boolean; disabled?: boolean; style?: StyleProp<ViewStyle>;
 }) {
   const off = disabled || loading;
+  // A disabled gradient button just looks muddy, so disabled primaries go flat.
+  const flat = !!disabled && !loading && variant === "primary";
   const inner = (
     <View style={styles.btnInner}>
       {loading ? <ActivityIndicator color="#fff" /> : icon ? <Ionicons name={icon} size={18} color={variant === "ghost" ? colors.primary : "#fff"} /> : null}
-      <Text style={[styles.btnText, variant === "ghost" && { color: colors.primary }]}>{title}</Text>
+      <Text numberOfLines={1} style={[styles.btnText, variant === "ghost" && { color: colors.primary }, flat && { color: colors.muted }]}>{title}</Text>
     </View>
   );
   return (
     <Pressable onPress={onPress} disabled={off} accessibilityRole="button" accessibilityState={{ disabled: !!off }} accessibilityLabel={title}
-      style={({ pressed }) => [{ opacity: off ? 0.5 : pressed ? 0.85 : 1, borderRadius: radius.pill, overflow: "hidden", minHeight: 48 }, style]}>
-      {variant === "primary" ? (
+      style={({ pressed }) => [{ opacity: flat ? 1 : off ? 0.5 : pressed ? 0.85 : 1, borderRadius: radius.pill, overflow: "hidden", minHeight: 48 }, style]}>
+      {flat ? (
+        <View style={[styles.btnFill, { backgroundColor: colors.surface2, borderWidth: 1, borderColor: colors.border }]}>{inner}</View>
+      ) : variant === "primary" ? (
         <LinearGradient colors={gradients.primary} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.btnFill}>{inner}</LinearGradient>
       ) : (
         <View style={[styles.btnFill, variant === "secondary" && { backgroundColor: colors.surface2, borderWidth: 1, borderColor: colors.border }, variant === "danger" && { backgroundColor: colors.danger + "33", borderWidth: 1, borderColor: colors.danger }, variant === "ghost" && { backgroundColor: "transparent" }]}>{inner}</View>
@@ -176,7 +180,19 @@ export function TrackSkeletons({ n = 5 }: { n?: number }) {
   ))}</View>;
 }
 
-export function EmptyState({ icon, title, body, action }: { icon: IconName; title: string; body?: string; action?: React.ReactNode }) {
+export function EmptyState({ icon, title, body, action, compact }: { icon: IconName; title: string; body?: string; action?: React.ReactNode; compact?: boolean }) {
+  if (compact) {
+    return (
+      <View style={{ flexDirection: "row", alignItems: "center", gap: space.md, backgroundColor: colors.surface, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, padding: space.md }}>
+        <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.primarySoft, alignItems: "center", justifyContent: "center" }}><Ionicons name={icon} size={20} color={colors.primary} /></View>
+        <View style={{ flex: 1 }}>
+          <Text style={{ color: colors.text, fontWeight: "700" }}>{title}</Text>
+          {body ? <Text style={{ color: colors.muted, fontSize: 13 }}>{body}</Text> : null}
+        </View>
+        {action}
+      </View>
+    );
+  }
   return (
     <View style={{ alignItems: "center", paddingVertical: space.xxl, gap: space.sm }}>
       <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: colors.primarySoft, alignItems: "center", justifyContent: "center" }}><Ionicons name={icon} size={30} color={colors.primary} /></View>

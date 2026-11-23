@@ -31,18 +31,18 @@ export default function Home() {
       <Screen refreshing={false} onRefresh={reloadAll}>
         <View style={{ gap: 4 }}>
           <Muted>Hi {user?.displayName}</Muted>
-          <H1>What are we listening to?</H1>
+          <H1>Listen together</H1>
         </View>
 
         <View style={{ flexDirection: "row", gap: space.md }}>
-          <Button title="Create a room" icon="add" onPress={() => router.push("/create-room")} style={{ flex: 1 }} />
+          <Button title="New room" icon="add" onPress={() => router.push("/create-room")} style={{ flex: 1 }} />
           <Button title="Join" icon="enter-outline" variant="secondary" onPress={() => router.push("/join")} style={{ flex: 1 }} />
         </View>
 
         <SectionHeader title="Your rooms" />
         {mine.error ? <ErrorBanner message={mine.error} onRetry={() => mine.reload()} /> : null}
         {mine.loading && !mine.data ? <TrackSkeletons n={2} /> : (mine.data ?? []).length === 0 ? (
-          <EmptyState icon="people-outline" title="No rooms yet" body="Create one and share the code, or join a friend's room." />
+          <EmptyState compact icon="people-outline" title="No rooms yet" body="Create one, or join a friend's." />
         ) : (
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: space.md }} style={{ marginHorizontal: -space.lg }} contentInsetAdjustmentBehavior="never">
             <View style={{ width: space.lg - space.md }} />
@@ -54,7 +54,7 @@ export default function Home() {
         <SectionHeader title="Open to join" action="See all" onAction={() => router.push("/rooms")} />
         {live.error ? <ErrorBanner message={live.error} onRetry={() => live.reload()} /> : null}
         {live.loading && !live.data ? <TrackSkeletons n={2} /> : joinable.length === 0 ? (
-          <Muted>No public rooms are open right now.</Muted>
+          <Muted>No other open rooms right now.</Muted>
         ) : (
           <View style={{ gap: space.md }}>{joinable.slice(0, 3).map((r) => <RoomCard key={r.id} room={r} onPress={() => router.push(`/join/${r.code}`)} />)}</View>
         )}

@@ -64,7 +64,7 @@ export default function Library() {
         </View>
         {lists.error ? <ErrorBanner message={lists.error} onRetry={() => lists.reload()} /> : null}
         {lists.loading && !lists.data ? <TrackSkeletons n={2} /> : (lists.data ?? []).length === 0 ? (
-          <EmptyState icon="albums-outline" title="No playlists yet" body="Name one above, then add tracks from your favorites." />
+          <EmptyState compact icon="albums-outline" title="No playlists yet" body="Name one above, then add tracks from your favorites." />
         ) : (
           <View style={{ gap: space.md }}>
             {lists.data!.map((p) => (
@@ -92,12 +92,12 @@ export default function Library() {
         <SectionHeader title="Favorites" />
         {favs.error ? <ErrorBanner message={favs.error} onRetry={() => favs.reload()} /> : null}
         {favs.loading && !favs.data ? <TrackSkeletons n={3} /> : (favs.data ?? []).length === 0 ? (
-          <EmptyState icon="heart-outline" title="No favorites yet" body="Tap the heart on any track to keep it here." />
+          <EmptyState compact icon="heart-outline" title="No favorites yet" body="Tap the heart on any track to keep it here." />
         ) : <View style={{ gap: space.sm }}>{favs.data!.map((t) => row(t))}</View>}
 
         <SectionHeader title="Recently played" />
         {recent.loading && !recent.data ? <TrackSkeletons n={3} /> : (recent.data ?? []).length === 0 ? (
-          <EmptyState icon="time-outline" title="Nothing played yet" body="Tracks you play on this phone or in a room show up here." />
+          <EmptyState compact icon="time-outline" title="Nothing played yet" body="Tracks you play on this phone or in a room show up here." />
         ) : <View style={{ gap: space.sm }}>{recent.data!.map((t) => row(t))}</View>}
       </Screen>
       <Toast msg={toast.msg} />
